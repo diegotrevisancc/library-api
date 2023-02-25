@@ -10,4 +10,18 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor //lombok
 @AllArgsConstructor //lombok
 public class Adress {
+    private String street;
+    private String neighborhood;
+    private String number;
+    private String state;
+    private String city;
+
+    public Adress(CreateAdress adress) {
+        this.street = adress.street();
+        this.neighborhood = adress.neighborhood();
+        this.number = adress.number();
+        this.state = adress.state();
+        this.city = adress.city();
+    }
+
 }
