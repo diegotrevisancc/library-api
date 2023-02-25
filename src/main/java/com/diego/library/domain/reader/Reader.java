@@ -25,6 +25,8 @@ public class Reader {
     @Embedded
     private Adress adress;
 
+    private boolean active;
+
     public Reader(CreateReader reader) {
         this.name = reader.name();
         this.email = reader.email();
