@@ -48,4 +48,8 @@ public class Reader {
             this.telephoneNumber = reader.telephoneNumber();
         }
     }
+
+    public void delete() {
+        this.active = false;
+    }
 }

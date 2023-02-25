@@ -1,9 +1,6 @@
 package com.diego.library.controller;
 
-import com.diego.library.domain.reader.CreateReader;
-import com.diego.library.domain.reader.Reader;
-import com.diego.library.domain.reader.ReaderRepository;
-import com.diego.library.domain.reader.UpdateReader;
+import com.diego.library.domain.reader.*;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.apache.catalina.connector.Response;
@@ -24,8 +21,8 @@ public class ReaderController {
     private ReaderRepository repository;
 
     @GetMapping
-    public ResponseEntity<Page<CreateReader>> getReaders(@PageableDefault(size=10, page = 0, sort={"name"}) Pageable paginator) {
-        Page<CreateReader> page = repository.findAllByActiveTrue(paginator).map(CreateReader::new);
+    public ResponseEntity<Page<ReaderDetails>> getReaders(@PageableDefault(size=10, page = 0, sort={"name"}) Pageable paginator) {
+        Page<ReaderDetails> page = repository.findAllByActiveTrue(paginator).map(ReaderDetails::new);
         return ResponseEntity.ok(page);
     }
     @PostMapping
@@ -36,12 +33,18 @@ public class ReaderController {
         var uri = uriBuilder.path("/readers/{id}").buildAndExpand(reader.getId()).toUri(); //creates http://localhost:8080/readers/id
         return ResponseEntity.created(uri).body(readerData);
     }
-
     @PutMapping
     @Transactional
     public ResponseEntity putReaders(@RequestBody UpdateReader readerData) {
         Reader reader = repository.getReferenceById(readerData.id());
         reader.updateReader(readerData);
         return ResponseEntity.ok(new CreateReader(reader));
+    }
+    @DeleteMapping("/{id}")
+    @Transactional
+    public ResponseEntity deleteReader(@PathVariable Long id) {
+        Reader reader = repository.getReferenceById(id);
+        reader.delete();
+        return ResponseEntity.noContent().build();
     }
 }
