@@ -25,7 +25,7 @@ public class Reader {
     @Embedded
     private Adress adress;
 
-    private boolean active;
+    private boolean active = true;
 
     public Reader(CreateReader reader) {
         this.name = reader.name();
