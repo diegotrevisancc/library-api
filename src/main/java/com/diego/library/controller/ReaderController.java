@@ -3,8 +3,10 @@ package com.diego.library.controller;
 import com.diego.library.domain.reader.CreateReader;
 import com.diego.library.domain.reader.Reader;
 import com.diego.library.domain.reader.ReaderRepository;
+import com.diego.library.domain.reader.UpdateReader;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
+import org.apache.catalina.connector.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -33,5 +35,13 @@ public class ReaderController {
         repository.save(reader);
         var uri = uriBuilder.path("/readers/{id}").buildAndExpand(reader.getId()).toUri(); //creates http://localhost:8080/readers/id
         return ResponseEntity.created(uri).body(readerData);
+    }
+
+    @PutMapping
+    @Transactional
+    public ResponseEntity putReaders(@RequestBody UpdateReader readerData) {
+        Reader reader = repository.getReferenceById(readerData.id());
+        reader.updateReader(readerData);
+        return ResponseEntity.ok(new CreateReader(reader));
     }
 }
