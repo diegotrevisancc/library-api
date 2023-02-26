@@ -30,7 +30,6 @@ public class BookController {
 
     @GetMapping
     public ResponseEntity<Page<BookDetails>> getBook(@PageableDefault(size = 10, page=0,sort = {"title"}) Pageable paginator) {
-        System.out.println(paginator.toString());
         Page<BookDetails> page = (Page<BookDetails>) repository.findAllByActiveTrue(paginator).map(BookDetails::new);
         return ResponseEntity.ok(page);
     }
@@ -38,10 +37,16 @@ public class BookController {
     @PutMapping
     @Transactional
     public ResponseEntity<BookDetails> putBook(@RequestBody BookChangeData bookData) {
-        System.out.println(bookData.id());
         Book oldBookData = repository.getReferenceById(bookData.id());
-        System.out.println(oldBookData);
         oldBookData.update(bookData);
         return ResponseEntity.ok(new BookDetails(oldBookData));
+    }
+
+    @DeleteMapping("/{id}")
+    @Transactional
+    public ResponseEntity deleteBook(@PathVariable Long id) {
+        Book book = repository.getReferenceById(id);
+        book.delete();
+        return ResponseEntity.noContent().build();
     }
 }

@@ -48,4 +48,8 @@ public class Book {
             this.length = newBookData.length();
         }
     }
+
+    public void delete() {
+        this.active = false;
+    }
 }
