@@ -1,11 +1,9 @@
 package com.diego.library.controller;
 
-import com.diego.library.domain.book.Book;
-import com.diego.library.domain.book.BookDetails;
-import com.diego.library.domain.book.BookRepository;
-import com.diego.library.domain.book.CreateBook;
+import com.diego.library.domain.book.*;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
+import org.apache.catalina.connector.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -35,5 +33,15 @@ public class BookController {
         System.out.println(paginator.toString());
         Page<BookDetails> page = (Page<BookDetails>) repository.findAllByActiveTrue(paginator).map(BookDetails::new);
         return ResponseEntity.ok(page);
+    }
+
+    @PutMapping
+    @Transactional
+    public ResponseEntity<BookDetails> putBook(@RequestBody BookChangeData bookData) {
+        System.out.println(bookData.id());
+        Book oldBookData = repository.getReferenceById(bookData.id());
+        System.out.println(oldBookData);
+        oldBookData.update(bookData);
+        return ResponseEntity.ok(new BookDetails(oldBookData));
     }
 }
